@@ -28,7 +28,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.less"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -123,6 +123,12 @@
           }
         }
       }
-    }},
-  "defaultProject": "zx-tbsg-ui"
+    }
+  },
+  "defaultProject": "zx-tbsg-ui",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
