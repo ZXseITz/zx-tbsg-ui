@@ -1,15 +1,15 @@
 <form [formGroup]="form" class="auth" (ngSubmit)="onSubmit()">
   <div class="form-group">
-    <label>Username</label>
-    <input formControlName="username" type="text" class="form-control"  placeholder="Username">
+    <label for="registerUsername">Username</label>
+    <input  id="registerUsername" formControlName="username" type="text" class="form-control"  placeholder="Username">
   </div>
   <div class="form-group">
-    <label>Email</label>
-    <input formControlName="email" type="email" class="form-control" placeholder="Email">
+    <label for="registerEmail">Email</label>
+    <input id="registerEmail" formControlName="email" type="email" class="form-control" placeholder="Email">
   </div>
   <div class="form-group">
-    <label>Password</label>
-    <input formControlName="password" type="password" class="form-control" placeholder="Password">
+    <label for="registerPassword">Password</label>
+    <input id="registerPassword" formControlName="password" type="password" class="form-control" placeholder="Password">
   </div>
   <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Register</button>
   <a href="/login" class="auth-link">I already have an account.</a>
