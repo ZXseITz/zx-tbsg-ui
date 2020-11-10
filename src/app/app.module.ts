@@ -9,6 +9,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { InputWarningComponent } from './input-warning/input-warning.component';
 
 import {AuthService} from './auth.service';
 
@@ -18,7 +19,8 @@ import {AuthService} from './auth.service';
     RegisterComponent,
     LoginComponent,
     HomeComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    InputWarningComponent
   ],
   imports: [
     BrowserModule,

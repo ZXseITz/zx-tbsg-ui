@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../auth.service';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -10,8 +10,10 @@ import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/form
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
+  private formSubmitAttempt: boolean;
 
   constructor(private authService: AuthService) {
+    this.formSubmitAttempt = false;
     this.form = new FormGroup({
       username: new FormControl('', [
         Validators.required,
@@ -27,17 +29,16 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  get username(): AbstractControl  {
-    return this.form.get('username');
-  }
-
-  get password(): AbstractControl  {
-    return this.form.get('password');
+  isFieldInvalid(name: string): boolean {
+    return this.formSubmitAttempt && !this.form.get(name).valid;
   }
 
   onSubmit(): void {
-    const values = this.form.value;
-    this.authService.login(values.username, values.password)
-      .subscribe((res) => console.log(res));
+    this.formSubmitAttempt = true;
+    if (this.form.valid) {
+      const values = this.form.value;
+      this.authService.login(values.username, values.password)
+        .subscribe((res) => console.log(res));
+    }
   }
 }

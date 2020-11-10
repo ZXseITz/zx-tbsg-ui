@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
-import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -10,8 +10,10 @@ import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/form
 })
 export class RegisterComponent implements OnInit {
   form: FormGroup;
+  private formSubmitAttempt: boolean;
 
   constructor(private authService: AuthService) {
+    this.formSubmitAttempt = false;
     this.form = new FormGroup({
       username: new FormControl('', [
         Validators.required,
@@ -31,21 +33,16 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  get username(): AbstractControl {
-    return this.form.get('username');
-  }
-
-  get email(): AbstractControl {
-    return this.form.get('email');
-  }
-
-  get password(): AbstractControl {
-    return this.form.get('password');
+  isFieldInvalid(name: string): boolean {
+    return this.formSubmitAttempt && !this.form.get(name).valid;
   }
 
   onSubmit(): void {
-    const values = this.form.value;
-    this.authService.register(values.username, values.email, values.password)
-      .subscribe(_ => console.log(`registered new user ${values.username}`));
+    this.formSubmitAttempt = true;
+    if (this.form.valid) {
+      const values = this.form.value;
+      this.authService.register(values.username, values.email, values.password)
+        .subscribe(_ => console.log(`registered new user ${values.username}`));
+    }
   }
 }
