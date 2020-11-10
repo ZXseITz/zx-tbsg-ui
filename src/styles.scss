@@ -2,10 +2,13 @@
 
 @import "~bootstrap/scss/bootstrap";
 
+$warning-color: #fcb603;
+$error-color: #b80f0f;
+
 .auth {
   width: 50%;
 }
 
-.auth-link {
+.redirect {
   margin-left: 2em;
 }

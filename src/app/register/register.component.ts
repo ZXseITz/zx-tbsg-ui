@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../auth.service';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -29,6 +29,18 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  get username(): AbstractControl {
+    return this.form.get('username');
+  }
+
+  get email(): AbstractControl {
+    return this.form.get('email');
+  }
+
+  get password(): AbstractControl {
+    return this.form.get('password');
   }
 
   onSubmit(): void {

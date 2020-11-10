@@ -1,16 +1,27 @@
 <form [formGroup]="form" class="auth" (ngSubmit)="onSubmit()">
   <div class="form-group">
     <label for="registerUsername">Username</label>
-    <input  id="registerUsername" formControlName="username" type="text" class="form-control"  placeholder="Username">
+    <input id="registerUsername" formControlName="username" type="text" class="form-control" placeholder="Username">
+    <span class="warning" *ngIf="(username.dirty || username.touched) && username.invalid">
+      Username length must be between 6 and 20 characters.<br>
+      Username can only include alphanumeric letters.
+    </span>
   </div>
   <div class="form-group">
     <label for="registerEmail">Email</label>
     <input id="registerEmail" formControlName="email" type="email" class="form-control" placeholder="Email">
+    <span class="warning" *ngIf="(email.dirty || email.touched) && email.invalid">
+      Email address is invalid.
+    </span>
   </div>
   <div class="form-group">
     <label for="registerPassword">Password</label>
     <input id="registerPassword" formControlName="password" type="password" class="form-control" placeholder="Password">
+    <span class="warning" *ngIf="(password.dirty || password.touched) && password.invalid">
+      Password length must be between 8 and 20 characters.<br>
+      Password must contain at least one letter, one number and one special character @$!%*#?&
+    </span>
   </div>
   <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Register</button>
-  <a href="/login" class="auth-link">I already have an account.</a>
+  <a href="/login" class="redirect">I already have an account.</a>
 </form>
