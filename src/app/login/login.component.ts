@@ -9,13 +9,14 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  form: FormGroup;
 
-  form = new FormGroup({
-    username: new FormControl('', [Validators.required, Validators.minLength(3)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)])
-  });
-
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) {
+    this.form = new FormGroup({
+      username: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+    });
+  }
 
   ngOnInit(): void {
   }
