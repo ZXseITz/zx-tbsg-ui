@@ -1,45 +1,33 @@
-import {HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {catchError} from 'rxjs/operators';
-import {Observable, throwError} from 'rxjs';
+import {environment} from '../environments/environment';
+import {RestClient} from './rest-client.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/v1/auth';
+  private readonly apiUrl: string;
+  public jwt: string;
 
-  constructor(private http: HttpClient) {
+  constructor(private rest: RestClient) {
+    this.apiUrl = `http://${environment.api_url}/auth`;
+    this.jwt = undefined;
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, {
+  async register(username: string, email: string, password: string): Promise<void> {
+    await this.rest.post(`${this.apiUrl}/register`, {
       username,
       email,
       password,
     });
   }
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, {
+  async login(username: string, password: string): Promise<void> {
+    await this.rest.post(`${this.apiUrl}/login`, {
       username,
       password,
+    }).then(res => res.json()).then(body => {
+      this.rest.authToken = body.jwt;
     });
   }
-
-  // private handleError(error: HttpErrorResponse) {
-  //   if (error.error instanceof ErrorEvent) {
-  //     // A client-side or network error occurred. Handle it accordingly.
-  //     console.error('An error occurred:', error.error.message);
-  //   } else {
-  //     // The backend returned an unsuccessful response code.
-  //     // The response body may contain clues as to what went wrong.
-  //     console.error(
-  //       `Backend returned code ${error.status}, ` +
-  //       `body was: ${error.error}`);
-  //   }
-  //   // Return an observable with a user-facing error message.
-  //   return throwError(
-  //     'Something bad happened; please try again later.');
-  // }
 }

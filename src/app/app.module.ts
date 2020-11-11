@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -11,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { InputWarningComponent } from './input-warning/input-warning.component';
 
+import {RestClient} from './rest-client.service';
 import {AuthService} from './auth.service';
 
 @NgModule({
@@ -25,11 +25,11 @@ import {AuthService} from './auth.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule
   ],
   providers: [
+    RestClient,
     AuthService
   ],
   bootstrap: [AppComponent]
