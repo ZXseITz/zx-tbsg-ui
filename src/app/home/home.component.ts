@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {GameService} from '../game.service';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +7,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  welcomeMsg: string;
 
-  constructor() { }
+  constructor(private gameService: GameService) {
+    this.welcomeMsg = 'Restricted';
+  }
 
   ngOnInit(): void {
+    this.getWelcome();
+  }
+
+  getWelcome(): void {
+     this.gameService.home()
+      .then(str => this.welcomeMsg = str)
+      .catch(err => console.error(`Error during init home: ${err}`));
   }
 
 }

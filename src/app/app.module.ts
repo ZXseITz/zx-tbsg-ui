@@ -12,6 +12,7 @@ import { InputWarningComponent } from './input-warning/input-warning.component';
 
 import {RestClient} from './rest-client.service';
 import {AuthService} from './auth.service';
+import {GameService} from './game.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import {AuthService} from './auth.service';
   ],
   providers: [
     RestClient,
-    AuthService
+    AuthService,
+    GameService
   ],
   bootstrap: [AppComponent]
 })

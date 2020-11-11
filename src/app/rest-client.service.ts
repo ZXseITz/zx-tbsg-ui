@@ -4,12 +4,6 @@ import {Injectable} from '@angular/core';
   providedIn: 'root',
 })
 export class RestClient {
-  public authToken: string;
-
-  constructor() {
-    this.authToken = undefined;
-  }
-
   private static request(url: string, init: object): Promise<Response> {
     return fetch(url, init)
       .then(res => {
@@ -23,10 +17,12 @@ export class RestClient {
       });
   }
 
-  private buildHeaders(headersInit?: HeadersInit): Headers {
+  // todo use interceptor
+  private static buildHeaders(headersInit?: HeadersInit): Headers {
+    const token = localStorage.getItem('token');
     const headers = new Headers(headersInit);
-    if (this.authToken !== undefined) {
-      headers.append('Authorization', this.authToken);
+    if (token) {
+      headers.append('Authorization', token);
     }
     return headers;
   }
@@ -34,14 +30,14 @@ export class RestClient {
   public get(url: string): Promise<Response> {
     return RestClient.request(url, {
       method: 'GET',
-      headers: this.buildHeaders()
+      headers: RestClient.buildHeaders()
     });
   }
 
   public post(url: string, payload: object): Promise<Response> {
     return RestClient.request(url, {
       method: 'POST',
-      headers: this.buildHeaders({
+      headers: RestClient.buildHeaders({
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(payload)
@@ -51,7 +47,7 @@ export class RestClient {
   public put(url: string, payload: object): Promise<Response> {
     return RestClient.request(url, {
       method: 'PUT',
-      headers: this.buildHeaders({
+      headers: RestClient.buildHeaders({
         'Content-Type': 'application/json'
       }),
       body: JSON.stringify(payload)
@@ -61,7 +57,7 @@ export class RestClient {
   public delete(url: string): Promise<Response> {
     return RestClient.request(url, {
       method: 'DELETE',
-      headers: this.buildHeaders()
+      headers: RestClient.buildHeaders()
     });
   }
 }
