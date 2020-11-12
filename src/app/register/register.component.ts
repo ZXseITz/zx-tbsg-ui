@@ -43,7 +43,6 @@ export class RegisterComponent implements OnInit {
       const values = this.form.value;
       this.authService.register(values.username, values.email, values.password)
         .subscribe(_ => console.log(`registered new user ${values.username}`));
-        // .catch(err => console.error(`error during registering: ${err}`));
     }
   }
 }

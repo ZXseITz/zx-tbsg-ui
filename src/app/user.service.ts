@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../environments/environment';
 import {User} from './user';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,12 @@ export class UserService {
   }
 
   loadUser(userid: string): Observable<User> {
-    return  this.http.get<User>(`${this.apiUrl}/${userid}`);
+    return this.http.get<User>(`${this.apiUrl}/${userid}`)
+      .pipe(
+        catchError((err) => {
+          console.error(`error during loading user ${userid}: ${err.error.message}`);
+          return of({username: 'n/a', email: 'n/a'});
+        })
+      );
   }
 }

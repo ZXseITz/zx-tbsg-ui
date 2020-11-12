@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {environment} from '../environments/environment';
 import jwt_decode from 'jwt-decode';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,12 @@ export class AuthService {
       username,
       email,
       password,
-    });
+    }).pipe(
+      catchError((err) => {
+        console.error(`error during registration: ${err.error.message}`);
+        return of();
+      })
+    );
   }
 
   login(username: string, password: string): Observable<any> {
@@ -32,11 +37,15 @@ export class AuthService {
       username,
       password,
     }).pipe(
-      map(body => {
+      tap(body => {
         const dec = jwt_decode(body.jwt) as {sub: string, exp: number};
         localStorage.setItem(AuthService.STORAGE_USER_ID, dec.sub);
         localStorage.setItem(AuthService.STORAGE_TOKEN_EXPIRED, `${dec.exp}`);
         localStorage.setItem(AuthService.STORAGE_TOKEN, `Bearer ${body.jwt}`);
+      }),
+      catchError((err) => {
+        console.error(`error during logging in: ${err.error.message}`);
+        return of();
       })
     );
   }

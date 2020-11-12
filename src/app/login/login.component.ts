@@ -39,7 +39,6 @@ export class LoginComponent implements OnInit {
       const values = this.form.value;
       this.authService.login(values.username, values.password)
         .subscribe(_ => console.log('logged in'));
-        // .catch(err => console.error(`error during logging in: ${err}`));
     }
   }
 }

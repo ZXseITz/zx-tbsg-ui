@@ -13,8 +13,8 @@ export class AccountComponent implements OnInit {
 
   constructor(private userService: UserService) {
     this.user = {
-      username: 'loading',
-      email: 'loading',
+      username: undefined,
+      email: undefined,
     };
   }
 
@@ -26,6 +26,5 @@ export class AccountComponent implements OnInit {
   getUser(userid: string): void {
     this.userService.loadUser(userid)
       .subscribe(usr => this.user = usr);
-      // .catch(err => console.error(`Error loding user ${userid}: ${err}`));
   }
 }

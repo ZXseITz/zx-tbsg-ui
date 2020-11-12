@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +18,11 @@ export class GameService {
   home(): Observable<string> {
     return this.http.get(this.apiUrl, {
       responseType: 'text'
-    });
+    }).pipe(
+      catchError((err) => {
+        console.error(`error during fetching home: ${err.error.message}`);
+        return of('restricted');
+      })
+    );
   }
 }
