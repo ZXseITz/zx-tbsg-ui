@@ -19,8 +19,8 @@ export class HomeComponent implements OnInit {
 
   getWelcome(): void {
      this.gameService.home()
-      .then(str => this.welcomeMsg = str)
-      .catch(err => console.error(`Error during init home: ${err}`));
+      .subscribe(str => this.welcomeMsg = str);
+      // .catch(err => console.error(`Error during init home: ${err}`));
   }
 
 }

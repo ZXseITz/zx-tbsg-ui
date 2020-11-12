@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -13,9 +14,9 @@ import { AccountComponent } from './account/account.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { InputWarningComponent } from './input-warning/input-warning.component';
 
-import { RestClient } from './rest-client.service';
 import { AuthService } from './auth.service';
 import { GameService } from './game.service';
+import { httpInterceptorProviders } from './http-interceptors';
 
 @NgModule({
   declarations: [
@@ -33,12 +34,13 @@ import { GameService } from './game.service';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
-    RestClient,
     AuthService,
-    GameService
+    GameService,
+    httpInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

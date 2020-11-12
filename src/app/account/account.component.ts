@@ -25,7 +25,7 @@ export class AccountComponent implements OnInit {
 
   getUser(userid: string): void {
     this.userService.loadUser(userid)
-      .then(usr => this.user = usr)
-      .catch(err => console.error(`Error loding user ${userid}: ${err}`));
+      .subscribe(usr => this.user = usr);
+      // .catch(err => console.error(`Error loding user ${userid}: ${err}`));
   }
 }

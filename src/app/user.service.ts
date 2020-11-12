@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
-import {RestClient} from './rest-client.service';
 import {environment} from '../environments/environment';
 import {User} from './user';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +10,11 @@ import {User} from './user';
 export class UserService {
   private readonly apiUrl: string;
 
-  constructor(private rest: RestClient) {
+  constructor(private http: HttpClient) {
     this.apiUrl = `http://${environment.api_url}/user`;
   }
 
-  async loadUser(userid: string): Promise<User> {
-    const res = await this.rest.get(`${this.apiUrl}/${userid}`);
-    return  await res.json() as User;
+  loadUser(userid: string): Observable<User> {
+    return  this.http.get<User>(`${this.apiUrl}/${userid}`);
   }
 }
