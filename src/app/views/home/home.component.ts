@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {GameService} from '../game.service';
+import {GameService} from '../../services/game.service';
 
 @Component({
   selector: 'app-home',

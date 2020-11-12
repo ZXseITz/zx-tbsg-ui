@@ -5,18 +5,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { AccountComponent } from './account/account.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { RegisterComponent } from './views/register/register.component';
+import { LoginComponent } from './views/login/login.component';
+import { HomeComponent } from './views/home/home.component';
+import { AccountComponent } from './views/account/account.component';
+import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 import { InputWarningComponent } from './input-warning/input-warning.component';
 
-import { AuthService } from './auth.service';
-import { GameService } from './game.service';
-import { httpInterceptorProviders } from './http-interceptors';
+import { AuthService } from './services/auth.service';
+import { GameService } from './services/game.service';
+import { httpInterceptorProviders } from './interceptors';
 
 @NgModule({
   declarations: [
