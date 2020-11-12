@@ -9,12 +9,13 @@ import { FooterComponent } from './footer/footer.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
+import { AccountComponent } from './account/account.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { InputWarningComponent } from './input-warning/input-warning.component';
 
-import {RestClient} from './rest-client.service';
-import {AuthService} from './auth.service';
-import {GameService} from './game.service';
+import { RestClient } from './rest-client.service';
+import { AuthService } from './auth.service';
+import { GameService } from './game.service';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {GameService} from './game.service';
     RegisterComponent,
     LoginComponent,
     HomeComponent,
+    AccountComponent,
     PageNotFoundComponent,
     InputWarningComponent
   ],

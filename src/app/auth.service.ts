@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../environments/environment';
 import {RestClient} from './rest-client.service';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -27,6 +28,10 @@ export class AuthService {
     });
     const body = await res.json();
     // todo handle expiration
+    const jwt = body.jwt;
+    const dec = jwt_decode(jwt) as { sub: string, exp: number };
+    localStorage.setItem('userid', dec.sub);
+    localStorage.setItem('expired', `${dec.exp}`);
     localStorage.setItem('token', `Bearer ${body.jwt}`);
   }
 }
