@@ -11,17 +11,32 @@ export class GameService {
   private readonly apiUrl: string;
 
   constructor(private http: HttpClient) {
-    // todo: fix url
-    this.apiUrl = `http://${environment.api_url}/test/hello`;
+    this.apiUrl = `http://${environment.api_url}/games`;
   }
 
-  home(): Observable<string> {
-    return this.http.get(this.apiUrl, {
-      responseType: 'text'
-    }).pipe(
+  list(): Observable<Array<string>> {
+    return this.http.get<Array<string>>(this.apiUrl).pipe(
       catchError((err) => {
         console.error(`error during fetching home: ${err.error.message}`);
-        return of('restricted');
+        return of([]);
+      })
+    );
+  }
+
+  file(game, file): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${game}/files/${file}`).pipe(
+      catchError((err) => {
+        console.error(`error during fetching home: ${err.error.message}`);
+        return of([]);
+      })
+    );
+  }
+
+  webhook(game, webhook): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${game}/webhooks/${webhook}`).pipe(
+      catchError((err) => {
+        console.error(`error during fetching home: ${err.error.message}`);
+        return of([]);
       })
     );
   }

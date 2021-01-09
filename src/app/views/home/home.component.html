@@ -1,5 +1,16 @@
 <div class="row">
   <div class="col-sm">
-    {{ welcomeMsg }}
+    <p>Welcome to turn based strategy games</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm">
+    <h3>Available games</h3>
+    <ul>
+      <li *ngFor="let game of games">
+        <a [routerLink]="['/games', game]">{{game}}</a>
+      </li>
+    </ul>
   </div>
 </div>

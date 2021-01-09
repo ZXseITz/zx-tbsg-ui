@@ -7,19 +7,18 @@ import {GameService} from '../../services/game.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  welcomeMsg: string;
+  games: Array<string>;
 
   constructor(private gameService: GameService) {
-    this.welcomeMsg = 'Restricted';
+    this.games = [];
   }
 
   ngOnInit(): void {
-    this.getWelcome();
+    this.listGames();
   }
 
-  getWelcome(): void {
-     this.gameService.home()
-      .subscribe(str => this.welcomeMsg = str);
+  listGames(): void {
+     this.gameService.list()
+      .subscribe(games => this.games = games);
   }
-
 }
