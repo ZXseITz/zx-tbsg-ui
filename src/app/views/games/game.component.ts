@@ -24,12 +24,12 @@ export class GameComponent implements OnInit, OnDestroy {
       this.name = params.game;
       this.display();
     });
-    this.reader.addEventListener('load', () => {
-      this.index = this.reader.result;
-    });
   }
 
   display(): void {
+    this.reader.addEventListener('load', () => {
+      this.index = this.reader.result;
+    });
     this.gameService.blob(this.name, 'index.html').subscribe(blob => {
       this.reader.readAsText(blob);
     });
