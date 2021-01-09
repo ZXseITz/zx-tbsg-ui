@@ -23,11 +23,13 @@ export class GameService {
     );
   }
 
-  file(game, file): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${game}/files/${file}`).pipe(
+  blob(game, file): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/${game}/blob/${file}`, {
+      responseType: 'blob'
+    }).pipe(
       catchError((err) => {
         console.error(`error during fetching home: ${err.error.message}`);
-        return of([]);
+        return of(null);
       })
     );
   }
@@ -36,7 +38,7 @@ export class GameService {
     return this.http.get(`${this.apiUrl}/${game}/webhooks/${webhook}`).pipe(
       catchError((err) => {
         console.error(`error during fetching home: ${err.error.message}`);
-        return of([]);
+        return of();
       })
     );
   }
