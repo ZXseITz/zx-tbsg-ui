@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { RegisterComponent } from './views/register/register.component';
 import { LoginComponent } from './views/login/login.component';
 import { HomeComponent } from './views/home/home.component';
-import { GameComponent } from './views/games/game.component';
+import { GameComponent } from './views/game/game.component';
 import { AccountComponent } from './views/account/account.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 

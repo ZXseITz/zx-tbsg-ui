@@ -11,35 +11,35 @@ import {SafeHtml, SafeResourceUrl} from '@angular/platform-browser';
 export class GameComponent implements OnInit, OnDestroy {
   gameName: string;
   html: SafeHtml;
-  styles: Array<SafeResourceUrl>;
-  scripts: Array<SafeResourceUrl>;
+  // styles: Array<SafeResourceUrl>;
   private sub: any;
 
   constructor(private route: ActivatedRoute,
               private gameService: GameService) {
     this.gameName = 'n/a';
     this.html = undefined;
-    this.styles = new Array<SafeResourceUrl>();
-    this.scripts = new Array<SafeResourceUrl>();
+    // this.styles = new Array<SafeResourceUrl>();
   }
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {
       this.gameName = params.game;
-      this.gameService.downloadHtml(this.gameName, 'index.html')
-        .subscribe(html => this.html = html);
-      this.gameService.listStyleUrls(this.gameName)
-        .subscribe(styles => {
-          styles.forEach(style => {
-            this.styles.push(style);
-          });
-        });
-      this.gameService.listScriptUrls(this.gameName)
-        .subscribe(scripts => {
-          scripts.forEach(script => {
-            this.scripts.push(script);
-          })
-        });
+
+    //   this.gameService.downloadHtml(this.gameName, 'index.html')
+    //     .subscribe(html => this.html = html);
+    //   this.gameService.listStyleUrls(this.gameName)
+    //     .subscribe(styles => {
+    //       styles.forEach(style => {
+    //         this.styles.push(style);
+    //       });
+    //     });
+    //   this.gameService.listScriptUrls(this.gameName)
+    //     .subscribe(scripts => {
+    //       this.myscript = scripts[0];
+    //       scripts.forEach(script => {
+    //         this.scripts.push(script);
+    //       });
+    //     });
     });
   }
 

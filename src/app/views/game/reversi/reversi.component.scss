@@ -1,0 +1,10 @@
+#board {
+  background-color: darkgreen;
+  width: 100%;
+  height: 100%;
+}
+
+:host .bline {
+  stroke: black;
+  stroke-width: 0.5;
+}
