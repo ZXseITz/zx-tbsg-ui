@@ -1,10 +1,12 @@
 <div class="row">
   <div class="col-sm">
-    <h3>{{name | uppercase}}</h3>
+    <h3>{{gameName | uppercase}}</h3>
   </div>
 </div>
 <div class="row">
   <div class="col-sm">
-    <div [innerHTML]="index"></div>
+    <div [innerHTML]="html"></div>
   </div>
 </div>
+<link *ngFor="let style of styles" rel="stylesheet" [href]="style">
+<script *ngFor="let script of scripts" [src]="script"></script>

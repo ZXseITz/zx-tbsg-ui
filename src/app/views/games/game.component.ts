@@ -1,37 +1,45 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameService} from '../../services/game.service';
+import {SafeHtml, SafeResourceUrl} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-
 export class GameComponent implements OnInit, OnDestroy {
-  name: string;
-  index: any;
+  gameName: string;
+  html: SafeHtml;
+  styles: Array<SafeResourceUrl>;
+  scripts: Array<SafeResourceUrl>;
   private sub: any;
-  private reader: FileReader;
 
-  constructor(private route: ActivatedRoute, private gameService: GameService) {
-    this.name = 'n/a';
-    this.reader = new FileReader();
+  constructor(private route: ActivatedRoute,
+              private gameService: GameService) {
+    this.gameName = 'n/a';
+    this.html = undefined;
+    this.styles = new Array<SafeResourceUrl>();
+    this.scripts = new Array<SafeResourceUrl>();
   }
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe(params => {
-      this.name = params.game;
-      this.display();
-    });
-  }
-
-  display(): void {
-    this.reader.addEventListener('load', () => {
-      this.index = this.reader.result;
-    });
-    this.gameService.blob(this.name, 'index.html').subscribe(blob => {
-      this.reader.readAsText(blob);
+      this.gameName = params.game;
+      this.gameService.downloadHtml(this.gameName, 'index.html')
+        .subscribe(html => this.html = html);
+      this.gameService.listStyleUrls(this.gameName)
+        .subscribe(styles => {
+          styles.forEach(style => {
+            this.styles.push(style);
+          });
+        });
+      this.gameService.listScriptUrls(this.gameName)
+        .subscribe(scripts => {
+          scripts.forEach(script => {
+            this.scripts.push(script);
+          })
+        });
     });
   }
 
