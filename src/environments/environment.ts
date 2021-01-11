@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   https: false,
-  api_url: 'localhost:8080/api/v1'
+  api_url: 'localhost:8080/api/v1',
+  ws_url: 'localhost:8080/socket/v1'
 };
 
 /*

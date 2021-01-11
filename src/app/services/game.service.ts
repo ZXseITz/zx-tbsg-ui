@@ -3,18 +3,19 @@ import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {DomSanitizer, SafeHtml, SafeScript, SafeStyle} from '@angular/platform-browser';
-import {ReversiComponent} from '../views/game/reversi/reversi.component';
+// import {DomSanitizer, SafeHtml, SafeScript, SafeStyle} from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
   public readonly apiUrl: string;
+  public readonly wsUrl: string;
   // private reader: FileReader;
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {
+  constructor(private http: HttpClient, /* private sanitizer: DomSanitizer */) {
     this.apiUrl = `http://${environment.api_url}/games`;
+    this.wsUrl = `ws://${environment.ws_url}/games`;
     // this.reader = new FileReader();
   }
 

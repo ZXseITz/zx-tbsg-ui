@@ -9,6 +9,7 @@ import {DOCUMENT} from '@angular/common';
 export class ReversiComponent implements OnInit {
   constructor(@Inject(DOCUMENT) private document: Document,
               private renderer: Renderer2) {
+
   }
 
   ngOnInit(): void {
@@ -31,5 +32,9 @@ export class ReversiComponent implements OnInit {
     //   vLine.setAttribute('y2', '100.0');
     //   board.appendChild(vLine);
     // }
+  }
+
+  connect(): void {
+
   }
 }
