@@ -1,4 +1,4 @@
-import {Component, ElementRef, Inject, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, Inject, OnInit, Output, Renderer2} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 
 @Component({
@@ -9,7 +9,6 @@ import {DOCUMENT} from '@angular/common';
 export class ReversiComponent implements OnInit {
   constructor(@Inject(DOCUMENT) private document: Document,
               private renderer: Renderer2) {
-
   }
 
   ngOnInit(): void {

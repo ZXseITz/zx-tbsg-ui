@@ -4,17 +4,18 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {DomSanitizer, SafeHtml, SafeScript, SafeStyle} from '@angular/platform-browser';
+import {ReversiComponent} from '../views/game/reversi/reversi.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GameService {
   public readonly apiUrl: string;
-  private reader: FileReader;
+  // private reader: FileReader;
 
   constructor(private http: HttpClient, private sanitizer: DomSanitizer) {
     this.apiUrl = `http://${environment.api_url}/games`;
-    this.reader = new FileReader();
+    // this.reader = new FileReader();
   }
 
   list(): Observable<Array<string>> {
