@@ -3,20 +3,16 @@
     <h3>{{name | uppercase}}</h3>
   </div>
 </div>
+<div class="d-flex p-1">
+  <div class="p-1">Connection</div>
+  <div class="p-1"><span class="badge badge-info">{{connection}}</span></div>
+</div>
+<div class="d-flex p-1">
+  <div class="p-1">Connection ID</div>
+  <div class="p-1"><span class="badge badge-light">{{socketId}}</span></div>
+</div>
 <div class="row">
-  <div class="col-sm-8">
+  <div class="col-sm">
     <ng-content></ng-content>
-  </div>
-  <div class="col-sm-4">
-    <button (click)="fetchOpponents()">Refresh</button><br>
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let opponent of opponents">
-        <div>
-          {{opponent.username}}
-          <br>
-          <span>[{{opponent.id}}]</span>
-        </div>
-      </li>
-    </ul>
   </div>
 </div>

@@ -10,13 +10,13 @@ import {Client} from '../../models/client';
 })
 export class GameComponent implements OnInit, OnDestroy {
   @Input() name: string;
-  opponents: Array<Client>;
+  connection: string;
+  socketId: string;
   private websocket: WebSocket;
   private handler: object;
 
   constructor(private route: ActivatedRoute,
               private gameService: GameService) {
-    this.opponents = new Array<Client>(0);
   }
 
   private emitMessage(message: object): void {
@@ -24,12 +24,15 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.connection = 'connecting';
     const url = `${this.gameService.wsUrl}/${this.name}`;
     this.websocket = new WebSocket(url);
     this.websocket.onopen = () => {
+      this.connection = 'connected';
       console.log(`connected to ${url}`);
     };
     this.websocket.onclose = (message) => {
+      this.connection = 'disconnected';
       console.log(`disconnected from ${url}`);
     };
     this.websocket.onerror = (error) => {
@@ -46,12 +49,9 @@ export class GameComponent implements OnInit, OnDestroy {
       const msg = JSON.parse(message);
       if (msg.hasOwnProperty('code') && msg.hasOwnProperty('args')) {
         switch (msg.code) {
-          case GameService.CODE_LIST: {
-            if (msg.args.hasOwnProperty('opponents')) {
-              for (const [id, name] of Object.entries(msg.args.opponents)) {
-                const username = name.toString();
-                this.opponents.push({id, username});
-              }
+          case GameService.CODE_ID: {
+            if (msg.args.hasOwnProperty('id')) {
+              this.socketId = msg.args.id;
             }
             break;
           }
@@ -61,12 +61,6 @@ export class GameComponent implements OnInit, OnDestroy {
         }
       }
     }
-  }
-
-  fetchOpponents(): void {
-    this.emitMessage({
-      code: GameService.CODE_LIST
-    });
   }
 
   challenge(opponent: Client): void {
