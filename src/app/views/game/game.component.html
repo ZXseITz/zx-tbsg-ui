@@ -12,7 +12,15 @@
   <div class="p-1"><span class="badge badge-light">{{socketId}}</span></div>
 </div>
 <div class="row">
-  <div class="col-sm">
+  <div class="col-sm-8">
     <ng-content></ng-content>
+  </div>
+  <div class="col-sm-4">
+    <div class="input-group mb-3">
+      <input #challengeId type="text" class="form-control" placeholder="opponent id" aria-label="Opponent Id" aria-describedby="basic-addon2">
+      <div class="input-group-append">
+        <button #challengeBtn class="btn btn-outline-secondary" type="button" (click)="onChallenge()"></button>
+      </div>
+    </div>
   </div>
 </div>

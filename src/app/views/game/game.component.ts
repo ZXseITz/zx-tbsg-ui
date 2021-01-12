@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameService} from '../../services/game.service';
 import {Client} from '../../models/client';
@@ -10,10 +10,12 @@ import {Client} from '../../models/client';
 })
 export class GameComponent implements OnInit, OnDestroy {
   @Input() name: string;
+  @ViewChild('challengeId', { static: true }) challengeInput: ElementRef;
+  @ViewChild('challengeBtn', { static: true }) challengeButton: ElementRef;
+  private websocket: WebSocket;
   connection: string;
   socketId: string;
-  private websocket: WebSocket;
-  private handler: object;
+  state: number;
 
   constructor(private route: ActivatedRoute,
               private gameService: GameService) {
@@ -25,6 +27,8 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.connection = 'connecting';
+    this.state = 0;
+    this.challengeButton.nativeElement.innerHTML = 'Challenge';
     const url = `${this.gameService.wsUrl}/${this.name}`;
     this.websocket = new WebSocket(url);
     this.websocket.onopen = () => {
@@ -43,7 +47,7 @@ export class GameComponent implements OnInit, OnDestroy {
     };
   }
 
-  invokeMessage(message: any): void {
+  private invokeMessage(message: any): void {
     console.log(`received message: ${message}`); // fixme
     if (typeof message === 'string') {
       const msg = JSON.parse(message);
@@ -63,18 +67,26 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  challenge(opponent: Client): void {
-    this.emitMessage({
-      code: GameService.CODE_CHALLENGE,
-      args: {opponent: opponent.id}
-    });
-  }
-
-  challengeAbort(opponent: Client): void {
-    this.emitMessage({
-      code: GameService.CODE_CHALLENGE_ABORT,
-      args: {opponent: opponent.id}
-    });
+  onChallenge(): void {
+    const input = this.challengeInput.nativeElement;
+    const button = this.challengeButton.nativeElement;
+    if (this.state === 0) {
+      input.disabled = true;
+      button.innerHTML = 'Abort';
+      this.state = 1;
+      this.emitMessage({
+        code: GameService.CODE_CHALLENGE,
+        args: {opponent: input.value}
+      });
+    } else if (this.state === 1) {
+      this.emitMessage({
+        code: GameService.CODE_CHALLENGE_ABORT,
+        args: {opponent: input.value}
+      });
+      this.state = 0;
+      input.disabled = false;
+      button.innerHTML = 'Challenge';
+    }
   }
 
   challengeAccept(opponent: Client): void {
