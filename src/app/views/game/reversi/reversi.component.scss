@@ -1,9 +1,39 @@
+$preview: 0.4;
+$color-bg: #006400;
+$color-white: #FFFFFF;
+$color-black: #000000;
+
 :host #board {
-  background-color: darkgreen;
+  background-color: $color-bg;
   width: 100%;
   height: 100%;
   max-width: 20cm;
   max-height: 20cm;
+}
+
+:host .token {
+  fill: $color-bg;
+  opacity: 0;
+}
+
+:host .token-white-preview {
+  fill: $color-white;
+  opacity: $preview;
+}
+
+:host .token-black-preview {
+  fill: $color-black;
+  opacity: $preview;
+}
+
+:host .token-white {
+  fill: $color-white;
+  opacity: 1;
+}
+
+:host .token-black {
+  fill: $color-black;
+  opacity: 1;
 }
 
 :host .bline {

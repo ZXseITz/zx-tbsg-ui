@@ -1,7 +1,7 @@
 import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {GameService} from '../../services/game.service';
-import {Client} from '../../models/client';
+import {EventHandler} from '../../models/eventHandler';
 import {environment} from '../../../environments/environment';
 
 @Component({
@@ -11,6 +11,7 @@ import {environment} from '../../../environments/environment';
 })
 export class GameComponent implements OnInit, OnDestroy {
   @Input() name: string;
+  @Input() handler: EventHandler;
   @ViewChild('challengeId', { static: true }) challengeInput: ElementRef;
   @ViewChild('challengeBtn', { static: true }) challengeButton: ElementRef;
   private websocket: WebSocket;
@@ -53,8 +54,6 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private invokeMessage(message: any): void {
-    const input = this.challengeInput.nativeElement;
-    const button = this.challengeButton.nativeElement;
     if (!environment.production) {
       console.log(`received message: ${message}`);
     }
@@ -84,28 +83,42 @@ export class GameComponent implements OnInit, OnDestroy {
           }
           case GameService.CODE_CHALLENGE_DECLINE: {
             if (msg.args.hasOwnProperty('opponent')) {
-              if (this.state === 1 && input.value === msg.args.opponent) {
+              if (this.state === 1 && this.challengeId === msg.args.opponent) {
                 this.state = 0;
-                input.disabled = false;
-                button.innerHTML = 'Challenge';
+                this.challengeInputDisable = false;
+                this.challengeButtonText = 'Challenge';
               }
             }
             break;
           }
           default: {
-            console.warn(`Unknown event code ${msg.code}`);
+            this.handler.invoke(this, msg.code, msg.args);
           }
         }
       }
     }
   }
 
+  get challengeId(): string {
+    const input = this.challengeInput.nativeElement;
+    return input.value;
+  }
+
+  set challengeInputDisable(value: boolean) {
+    const input = this.challengeInput.nativeElement;
+    input.disabled = value;
+  }
+
+  set challengeButtonText(value: string) {
+    const button = this.challengeButton.nativeElement;
+    button.innerHTML = value;
+  }
+
   onChallenge(): void {
     const input = this.challengeInput.nativeElement;
-    const button = this.challengeButton.nativeElement;
     if (this.state === 0) {
-      input.disabled = true;
-      button.innerHTML = 'Abort';
+      this.challengeInputDisable = true;
+      this.challengeButtonText = 'Abort';
       this.state = 1;
       this.emitMessage({
         code: GameService.CODE_CHALLENGE,
@@ -117,8 +130,8 @@ export class GameComponent implements OnInit, OnDestroy {
         args: {opponent: input.value}
       });
       this.state = 0;
-      input.disabled = false;
-      button.innerHTML = 'Challenge';
+      this.challengeInputDisable = false;
+      this.challengeButtonText = 'Challenge';
     }
   }
 

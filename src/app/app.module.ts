@@ -22,20 +22,20 @@ import { GameService } from './services/game.service';
 import { httpInterceptorProviders } from './interceptors';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    RegisterComponent,
-    LoginComponent,
-    HomeComponent,
-    GameComponent,
-    AccountComponent,
-    PageNotFoundComponent,
-    InputWarningComponent,
+    declarations: [
+        AppComponent,
+        HeaderComponent,
+        FooterComponent,
+        RegisterComponent,
+        LoginComponent,
+        HomeComponent,
+        GameComponent,
+        AccountComponent,
+        PageNotFoundComponent,
+        InputWarningComponent,
 
-    ReversiComponent
-  ],
+        ReversiComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
