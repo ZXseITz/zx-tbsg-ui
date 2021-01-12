@@ -9,12 +9,16 @@ import {catchError, map} from 'rxjs/operators';
   providedIn: 'root',
 })
 export class GameService {
-  public static get CODE_ID(): number { return 1000; }
+  public static get CLIENT_ID(): number { return 1000; }
+  public static get CLIENT_CHALLENGE(): number { return 1010; }
+  public static get CLIENT_CHALLENGE_ABORT(): number { return 1011; }
+  public static get CLIENT_CHALLENGE_ACCEPT(): number { return 1012; }
+  public static get CLIENT_CHALLENGE_DECLINE(): number { return 1013; }
 
-  public static get CODE_CHALLENGE(): number { return 1100; }
-  public static get CODE_CHALLENGE_ABORT(): number { return 1101; }
-  public static get CODE_CHALLENGE_ACCEPT(): number { return 1102; }
-  public static get CODE_CHALLENGE_DECLINE(): number { return 1103; }
+  public static get SERVER_ID(): number { return 1100; }
+  public static get SERVER_CHALLENGE(): number { return 1110; }
+  public static get SERVER_CHALLENGE_ABORT(): number { return 1111; }
+  public static get SERVER_CHALLENGE_DECLINE(): number { return 1113; }
   // private reader: FileReader;
 
   constructor(private http: HttpClient, /* private sanitizer: DomSanitizer */) {
