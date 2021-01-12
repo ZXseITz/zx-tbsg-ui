@@ -22,6 +22,8 @@ export class GameComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private gameService: GameService) {
     this.contenders = new Map();
+    // this.contenders.set('cda3ba62-d5e3-27a0-4e9d-a7f99ec05a08', 'guest'); // fixme
+    // this.contenders.set('cda3ba62-d5e3-27a0-4e9d-a7f99ec05a09', 'guest'); // fixme
   }
 
   private emitMessage(message: object): void {
@@ -51,6 +53,8 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private invokeMessage(message: any): void {
+    const input = this.challengeInput.nativeElement;
+    const button = this.challengeButton.nativeElement;
     if (!environment.production) {
       console.log(`received message: ${message}`);
     }
@@ -75,6 +79,16 @@ export class GameComponent implements OnInit, OnDestroy {
             if (msg.args.hasOwnProperty('opponent')) {
               const opponent = msg.args.opponent;
               this.contenders.delete(opponent);
+            }
+            break;
+          }
+          case GameService.CODE_CHALLENGE_DECLINE: {
+            if (msg.args.hasOwnProperty('opponent')) {
+              if (this.state === 1 && input.value === msg.args.opponent) {
+                this.state = 0;
+                input.disabled = false;
+                button.innerHTML = 'Challenge';
+              }
             }
             break;
           }
@@ -108,18 +122,20 @@ export class GameComponent implements OnInit, OnDestroy {
     }
   }
 
-  challengeAccept(opponent: Client): void {
+  onChallengeAccept(opponentId: string): void {
     this.emitMessage({
       code: GameService.CODE_CHALLENGE_ACCEPT,
-      args: {opponent: opponent.id}
+      args: {opponent: opponentId}
     });
+    this.contenders.delete(opponentId);
   }
 
-  challengeDecline(opponent: Client): void {
+  onChallengeDecline(opponentId: string): void {
     this.emitMessage({
       code: GameService.CODE_CHALLENGE_DECLINE,
-      args: {opponent: opponent.id}
+      args: {opponent: opponentId}
     });
+    this.contenders.delete(opponentId);
   }
 
   ngOnDestroy(): void {
