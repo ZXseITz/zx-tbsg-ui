@@ -9,8 +9,11 @@ import {catchError, map} from 'rxjs/operators';
   providedIn: 'root',
 })
 export class GameService {
-  public readonly apiUrl: string;
-  public readonly wsUrl: string;
+  public static get CODE_LIST(): number { return 1000; }
+  public static get CODE_CHALLENGE(): number { return 1001; }
+  public static get CODE_CHALLENGE_ABORT(): number { return 1002; }
+  public static get CODE_CHALLENGE_ACCEPT(): number { return 1003; }
+  public static get CODE_CHALLENGE_DECLINE(): number { return 1004; }
   // private reader: FileReader;
 
   constructor(private http: HttpClient, /* private sanitizer: DomSanitizer */) {
@@ -18,6 +21,9 @@ export class GameService {
     this.wsUrl = `ws://${environment.ws_url}/games`;
     // this.reader = new FileReader();
   }
+
+  public readonly apiUrl: string;
+  public readonly wsUrl: string;
 
   list(): Observable<Array<string>> {
     return this.http.get<Array<string>>(this.apiUrl).pipe(

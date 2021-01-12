@@ -19,6 +19,10 @@ export class GameComponent implements OnInit, OnDestroy {
     this.opponents = new Array<Client>(0);
   }
 
+  private emitMessage(message: object): void {
+    this.websocket.send(JSON.stringify(message));
+  }
+
   ngOnInit(): void {
     const url = `${this.gameService.wsUrl}/${this.name}`;
     this.websocket = new WebSocket(url);
@@ -42,7 +46,7 @@ export class GameComponent implements OnInit, OnDestroy {
       const msg = JSON.parse(message);
       if (msg.hasOwnProperty('code') && msg.hasOwnProperty('args')) {
         switch (msg.code) {
-          case 1100: {
+          case GameService.CODE_LIST: {
             if (msg.args.hasOwnProperty('opponents')) {
               for (const [id, name] of Object.entries(msg.args.opponents)) {
                 const username = name.toString();
@@ -60,9 +64,37 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   fetchOpponents(): void {
-    this.websocket.send(JSON.stringify({
-      code: 1100
-    }));
+    this.emitMessage({
+      code: GameService.CODE_LIST
+    });
+  }
+
+  challenge(opponent: Client): void {
+    this.emitMessage({
+      code: GameService.CODE_CHALLENGE,
+      args: {opponent: opponent.id}
+    });
+  }
+
+  challengeAbort(opponent: Client): void {
+    this.emitMessage({
+      code: GameService.CODE_CHALLENGE_ABORT,
+      args: {opponent: opponent.id}
+    });
+  }
+
+  challengeAccept(opponent: Client): void {
+    this.emitMessage({
+      code: GameService.CODE_CHALLENGE_ACCEPT,
+      args: {opponent: opponent.id}
+    });
+  }
+
+  challengeDecline(opponent: Client): void {
+    this.emitMessage({
+      code: GameService.CODE_CHALLENGE_DECLINE,
+      args: {opponent: opponent.id}
+    });
   }
 
   ngOnDestroy(): void {

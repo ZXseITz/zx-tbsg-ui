@@ -9,8 +9,8 @@
   </div>
   <div class="col-sm-4">
     <button (click)="fetchOpponents()">Refresh</button><br>
-    <ul>
-      <li *ngFor="let opponent of opponents">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let opponent of opponents">
         <div>
           {{opponent.username}}
           <br>
