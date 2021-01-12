@@ -2,7 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {EventHandler} from '../../../models/eventHandler';
 import {GameComponent} from '../game.component';
-import {ReversiToken, TokenState} from './token.js';
+import {Line, ReversiToken, TokenState} from './token.js';
 
 @Component({
   selector: 'app-game-reversi',
@@ -12,6 +12,8 @@ import {ReversiToken, TokenState} from './token.js';
 export class ReversiComponent implements OnInit {
   eventHandler: EventHandler;
   tokens: Array<ReversiToken>;
+  hLines: Array<Line>;
+  vLines: Array<Line>;
 
   constructor(@Inject(DOCUMENT) document: Document) {
     const game = this;
@@ -44,6 +46,13 @@ export class ReversiComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.hLines = new Array<Line>(9);
+    this.vLines = new Array<Line>(9);
+    for (let i = 0; i < 9; i++) {
+      const delta = i * 12.5;
+      this.hLines[i] = {x1: 0, y1: delta, x2: 100, y2: delta};
+      this.vLines[i] = {x1: delta, y1: 0, x2: delta, y2: 100};
+    }
     this.tokens = new Array<ReversiToken>(64);
     for (let i = 0; i < 64; i++) {
       this.tokens[i] = {
