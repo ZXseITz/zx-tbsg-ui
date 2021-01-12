@@ -4,7 +4,19 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-sm">
+  <div class="col-sm-8">
     <ng-content></ng-content>
+  </div>
+  <div class="col-sm-4">
+    <button (click)="fetchOpponents()">Refresh</button><br>
+    <ul>
+      <li *ngFor="let opponent of opponents">
+        <div>
+          {{opponent.username}}
+          <br>
+          <span>[{{opponent.id}}]</span>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>

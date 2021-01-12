@@ -11,7 +11,6 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
   { path: 'games/reversi', component: ReversiComponent },
   { path: 'account', component: AccountComponent },

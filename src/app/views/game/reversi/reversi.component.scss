@@ -1,8 +1,9 @@
-#board {
+:host #board {
   background-color: darkgreen;
   width: 100%;
   height: 100%;
   max-width: 20cm;
+  max-height: 20cm;
 }
 
 :host .bline {
