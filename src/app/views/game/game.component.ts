@@ -2,6 +2,7 @@ import {Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angul
 import {ActivatedRoute} from '@angular/router';
 import {GameService} from '../../services/game.service';
 import {Client} from '../../models/client';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-game',
@@ -16,9 +17,11 @@ export class GameComponent implements OnInit, OnDestroy {
   connection: string;
   socketId: string;
   state: number;
+  contenders: Map<string, string>;
 
   constructor(private route: ActivatedRoute,
               private gameService: GameService) {
+    this.contenders = new Map();
   }
 
   private emitMessage(message: object): void {
@@ -48,7 +51,9 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   private invokeMessage(message: any): void {
-    console.log(`received message: ${message}`); // fixme
+    if (!environment.production) {
+      console.log(`received message: ${message}`);
+    }
     if (typeof message === 'string') {
       const msg = JSON.parse(message);
       if (msg.hasOwnProperty('code') && msg.hasOwnProperty('args')) {
@@ -56,6 +61,20 @@ export class GameComponent implements OnInit, OnDestroy {
           case GameService.CODE_ID: {
             if (msg.args.hasOwnProperty('id')) {
               this.socketId = msg.args.id;
+            }
+            break;
+          }
+          case GameService.CODE_CHALLENGE: {
+            if (msg.args.hasOwnProperty('opponent')) {
+              const opponent = msg.args.opponent;
+              this.contenders.set(opponent, 'guest');  // fixme
+            }
+            break;
+          }
+          case GameService.CODE_CHALLENGE_ABORT: {
+            if (msg.args.hasOwnProperty('opponent')) {
+              const opponent = msg.args.opponent;
+              this.contenders.delete(opponent);
             }
             break;
           }
