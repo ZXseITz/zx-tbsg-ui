@@ -1,8 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
-import {EventHandler} from '../../../models/eventHandler';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {GameComponent} from '../game.component';
 import {Line, ReversiToken, TokenState} from './token.js';
+import {Client} from '../../../models/client';
 import {GameService} from '../../../services/game.service';
 
 @Component({
@@ -10,7 +9,7 @@ import {GameService} from '../../../services/game.service';
   templateUrl: './reversi.component.html',
   styleUrls: ['./reversi.component.scss']
 })
-export class ReversiComponent implements OnInit {
+export class ReversiComponent implements OnInit, OnDestroy {
   public static get CLIENT_PLACE(): number { return 2000; }
 
   public static get SERVER_INIT_PLAYER_NEXT(): number { return 2100; }
@@ -21,88 +20,103 @@ export class ReversiComponent implements OnInit {
   public static get SERVER_DEFEAT(): number { return 2121; }
   public static get SERVER_TIE(): number { return 2122; }
 
-  eventHandler: EventHandler;
+  name: string;
+  client: Client;
   tokens: Array<ReversiToken>;
   hLines: Array<Line>;
   vLines: Array<Line>;
   color: number;
 
-  constructor(@Inject(DOCUMENT) document: Document) {
-    const game = this;
-    this.eventHandler = {
-      invoke(parent: GameComponent, code: number, args: any): void {
-        switch (code) {
-          case ReversiComponent.SERVER_INIT_PLAYER_NEXT: {
-            if (args.hasOwnProperty('color') && args.hasOwnProperty('board') && args.hasOwnProperty('preview')) {
-              game.initGame(parent, args.color);
-              game.updateBoard(args.board);
-              game.showPreview(args.preview);
-            }
-            break;
-          }
-          case ReversiComponent.SERVER_INIT_OPPONENT_NEXT: {
-            if (args.hasOwnProperty('color') && args.hasOwnProperty('board')) {
-              game.initGame(parent, args.color);
-              game.updateBoard(args.board);
-            }
-            break;
-          }
-          case ReversiComponent.SERVER_PLAYER_NEXT: {
-            if (args.hasOwnProperty('source') && args.hasOwnProperty('board') && args.hasOwnProperty('preview')) {
-              game.updateBoard(args.board);
-              game.updateSource(args.source);
-              game.showPreview(args.preview);
-            }
-            break;
-          }
-          case ReversiComponent.SERVER_OPPONENT_NEXT: {
-            if (args.hasOwnProperty('source') && args.hasOwnProperty('board')) {
-              game.updateBoard(args.board);
-              game.updateSource(args.source);
-            }
-            break;
-          }
-          case ReversiComponent.SERVER_VICTORY: {
-            if (args.hasOwnProperty('source') && args.hasOwnProperty('board')) {
-              game.updateBoard(args.board);
-              game.updateSource(args.source);
-              console.log('You won');  // fixme
-            }
-            break;
-          }
-          case ReversiComponent.SERVER_DEFEAT: {
-            if (args.hasOwnProperty('source') && args.hasOwnProperty('board')) {
-              game.updateBoard(args.board);
-              game.updateSource(args.source);
-              console.log('You lost');  // fixme
-            }
-            break;
-          }
-          case ReversiComponent.SERVER_TIE: {
-            if (args.hasOwnProperty('source') && args.hasOwnProperty('board')) {
-              game.updateBoard(args.board);
-              game.updateSource(args.source);
-              console.log('It\'s a tie');  // fixme
-            }
-            break;
-          }
-          default: {
-            console.warn(`Unknown event code ${code}`);
-          }
-        }
+  constructor(private gameService: GameService) {
+    this.name = 'reversi';
+    this.client = new Client(`${gameService.wsUrl}/reversi`);
+  }
+
+  ngOnInit(): void {
+    this.client.registerOnEvent(ReversiComponent.SERVER_INIT_PLAYER_NEXT, args => {
+      if (args.has('color') && args.has('board') && args.has('preview')) {
+        this.initGame(args.get('color'));  // fixme
+        this.updateBoard(args.get('board'));
+        this.showPreview(args.get('preview'));
       }
-    };
+    });
+    this.client.registerOnEvent(ReversiComponent.SERVER_INIT_OPPONENT_NEXT, args => {
+      if (args.has('color') && args.has('board')) {
+        this.initGame(args.get('color'));
+        this.updateBoard(args.get('board'));
+      }
+    });
+    this.client.registerOnEvent(ReversiComponent.SERVER_PLAYER_NEXT, args => {
+      if (args.has('source') && args.has('board') && args.has('preview')) {
+        this.updateBoard(args.get('board'));
+        this.updateSource(args.get('source'));
+        this.showPreview(args.get('preview'));
+      }
+    });
+    this.client.registerOnEvent(ReversiComponent.SERVER_OPPONENT_NEXT, args => {
+      if (args.has('source') && args.has('board')) {
+        this.updateBoard(args.get('board'));
+        this.updateSource(args.get('source'));
+      }
+    });
+    this.client.registerOnEvent(ReversiComponent.SERVER_VICTORY, args => {
+      if (args.has('source') && args.has('board')) {
+        this.finishGame();
+        this.updateBoard(args.get('board'));
+        this.updateSource(args.get('source'));
+        console.log('You won');  // fixme
+      }
+    });
+    this.client.registerOnEvent(ReversiComponent.SERVER_DEFEAT, args => {
+      if (args.has('source') && args.has('board')) {
+        this.finishGame();
+        this.updateBoard(args.get('board'));
+        this.updateSource(args.get('source'));
+        console.log('You lost');  // fixme
+      }
+    });
+    this.client.registerOnEvent(ReversiComponent.SERVER_TIE, args => {
+      if (args.has('source') && args.has('board')) {
+        this.finishGame();
+        this.updateBoard(args.get('board'));
+        this.updateSource(args.get('source'));
+        console.log('It\'s a tie');  // fixme
+      }
+    });
+    this.client.connect();
+    this.hLines = new Array<Line>(9);
+    this.vLines = new Array<Line>(9);
+    for (let i = 0; i < 9; i++) {
+      const delta = i * 12.5;
+      this.hLines[i] = {x1: 0, y1: delta, x2: 100, y2: delta};
+      this.vLines[i] = {x1: delta, y1: 0, x2: delta, y2: 100};
+    }
+    this.tokens = new Array<ReversiToken>(64);
+    for (let i = 0; i < 64; i++) {
+      this.tokens[i] = {
+        radius: 5,
+        state: TokenState.EMPTY,
+        x: (i % 8) * 12.5 + 6.25,
+        y: Math.floor(i / 8) * 12.5 + 6.25,
+        click: () => {
+
+        }
+      };
+    }
   }
 
   printColor(color: number): string {
     return color === 1 ? 'black' : color === 2 ? 'white' : 'undefined';
   }
 
-  initGame(parent: GameComponent, color: number): void {
-    parent.state = 2;
-    parent.challengeInputDisable = true;
-    parent.challengeButtonText = 'Challenge';
+  initGame(color: number): void {
+    this.client.inGame = true;
+    this.color  = color;
     console.log(`You play as ${this.printColor(color)}`);
+  }
+
+  finishGame(): void {
+    this.client.inGame = false;
   }
 
   updateBoard(board: Array<number>): void {
@@ -123,22 +137,7 @@ export class ReversiComponent implements OnInit {
     // todo highlight source index
   }
 
-  ngOnInit(): void {
-    this.hLines = new Array<Line>(9);
-    this.vLines = new Array<Line>(9);
-    for (let i = 0; i < 9; i++) {
-      const delta = i * 12.5;
-      this.hLines[i] = {x1: 0, y1: delta, x2: 100, y2: delta};
-      this.vLines[i] = {x1: delta, y1: 0, x2: delta, y2: 100};
-    }
-    this.tokens = new Array<ReversiToken>(64);
-    for (let i = 0; i < 64; i++) {
-      this.tokens[i] = {
-        radius: 5,
-        state: TokenState.EMPTY,
-        x: (i % 8) * 12.5 + 6.25,
-        y: Math.floor(i / 8) * 12.5 + 6.25
-      };
-    }
+  ngOnDestroy(): void {
+    this.client.disconnect();
   }
 }

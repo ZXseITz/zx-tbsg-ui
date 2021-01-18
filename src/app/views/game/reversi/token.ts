@@ -11,6 +11,7 @@ export interface ReversiToken  {
   x: number;
   y: number;
   state: TokenState;
+  click: () => void;
 }
 
 export interface Line {

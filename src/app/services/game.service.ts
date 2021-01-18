@@ -18,17 +18,17 @@ export class GameService {
   public static get SERVER_ID(): number { return 1100; }
   public static get SERVER_CHALLENGE(): number { return 1110; }
   public static get SERVER_CHALLENGE_ABORT(): number { return 1111; }
+  public static get SERVER_CHALLENGE_ACCEPT(): number { return 1112; }
   public static get SERVER_CHALLENGE_DECLINE(): number { return 1113; }
   // private reader: FileReader;
+
+  public readonly apiUrl: string;
+  public readonly wsUrl: string;
 
   constructor(private http: HttpClient, /* private sanitizer: DomSanitizer */) {
     this.apiUrl = `http://${environment.api_url}/games`;
     this.wsUrl = `ws://${environment.ws_url}/games`;
-    // this.reader = new FileReader();
   }
-
-  public readonly apiUrl: string;
-  public readonly wsUrl: string;
 
   list(): Observable<Array<string>> {
     return this.http.get<Array<string>>(this.apiUrl).pipe(

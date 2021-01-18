@@ -21,14 +21,24 @@
 </div>
 <div class="row mt-sm-2">
   <div class="col-sm">
-    <h6>Challenge</h6>
+    <h6>Challenges</h6>
     <div class="input-group mb-3">
       <input #challengeId type="text" class="form-control" placeholder="opponent id" aria-label="Opponent Id"
              aria-describedby="basic-addon2">
       <div class="input-group-append">
-        <button #challengeBtn class="btn btn-outline-secondary" type="button" (click)="onChallenge()"></button>
+        <button #challengeBtn class="btn btn-outline-secondary" type="button" (click)="onChallenge()">Challenge</button>
       </div>
     </div>
+    <ul class="list-group">
+      <li *ngFor="let entry of challenges | keyvalue"
+          class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="flex-grow-1">
+          {{entry.value}}
+          <span class="badge badge-secondary badge-pill">{{entry.key}}</span>
+        </div>
+        <button class="btn btn-outline-danger" (click)="onChallengeAbort(entry.key)">Abort</button>
+      </li>
+    </ul>
   </div>
 </div>
 <div class="row">
