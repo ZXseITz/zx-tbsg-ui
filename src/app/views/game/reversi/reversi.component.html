@@ -2,7 +2,7 @@
   <svg id="board" viewBox="0 0 100 100">
     <line *ngFor="let line of hLines" class="bline" [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2"></line>
     <line *ngFor="let line of vLines" class="bline" [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2"></line>
-    <circle *ngFor="let token of tokens" [attr.class]="token.state" [attr.r]="token.radius" [attr.cx]="token.x" [attr.cy]="token.y"></circle>
+    <circle *ngFor="let token of tokens" [attr.class]="token.state" [attr.r]="token.radius" [attr.cx]="token.x" [attr.cy]="token.y" (click)="token.onClick()"></circle>
   </svg>
 </app-game>
 

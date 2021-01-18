@@ -1,6 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {GameComponent} from '../game.component';
-import {Line, ReversiToken, TokenState} from './token.js';
+import {Line, Token, TokenState} from './token.js';
 import {Client} from '../../../models/client';
 import {GameService} from '../../../services/game.service';
 
@@ -22,7 +21,7 @@ export class ReversiComponent implements OnInit, OnDestroy {
 
   name: string;
   client: Client;
-  tokens: Array<ReversiToken>;
+  tokens: Array<Token>;
   hLines: Array<Line>;
   vLines: Array<Line>;
   color: number;
@@ -91,17 +90,13 @@ export class ReversiComponent implements OnInit, OnDestroy {
       this.hLines[i] = {x1: 0, y1: delta, x2: 100, y2: delta};
       this.vLines[i] = {x1: delta, y1: 0, x2: delta, y2: 100};
     }
-    this.tokens = new Array<ReversiToken>(64);
+    this.tokens = new Array<Token>(64);
     for (let i = 0; i < 64; i++) {
-      this.tokens[i] = {
-        radius: 5,
-        state: TokenState.EMPTY,
-        x: (i % 8) * 12.5 + 6.25,
-        y: Math.floor(i / 8) * 12.5 + 6.25,
-        click: () => {
-
-        }
-      };
+      this.tokens[i] = new Token(i, () => {
+        this.client.send(ReversiComponent.CLIENT_PLACE, {
+          index: i
+        });
+      });
     }
   }
 
@@ -122,14 +117,14 @@ export class ReversiComponent implements OnInit, OnDestroy {
   updateBoard(board: Array<number>): void {
     for (let i = 0; i < board.length; i++) {
       const state = board[i];
-      this.tokens[i].state = state === 1 ? TokenState.BLACK : state === 2 ? TokenState.WHITE : TokenState.EMPTY;
+      this.tokens[i].color = state === 1 ? TokenState.BLACK : state === 2 ? TokenState.WHITE : TokenState.EMPTY;
     }
   }
 
   showPreview(preview: Array<number>): void {
     const state = this.color === 1 ? TokenState.BLACK_PREVIEW : TokenState.WHITE_PREVIEW;
     preview.forEach(p => {
-      this.tokens[p].state = state;
+      this.tokens[p].color = state;
     });
   }
 

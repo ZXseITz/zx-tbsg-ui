@@ -78,7 +78,7 @@ export class Client {
       const data = message.data;
       if (typeof data === 'string') {
         if (!environment.production) {
-          console.log(`received message: ${message}`);
+          console.log(`received message: ${data}`);
         }
         const event = JSON.parse(data);
         if ('code' in event && typeof event.code === 'number'
@@ -93,14 +93,14 @@ export class Client {
   }
 
   public send(code: number, args: object): void {
-    const message = {
+    const event = JSON.stringify({
       code,
       args
-    };
+    });
     if (!environment.production) {
-      console.log(`send message: ${message}`);
+      console.log(`send message: ${event}`);
     }
-    this.websocket.send(JSON.stringify(message));
+    this.websocket.send(event);
   }
 
   public disconnect(): void {

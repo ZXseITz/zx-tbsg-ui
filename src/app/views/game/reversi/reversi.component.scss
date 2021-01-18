@@ -16,23 +16,23 @@ $color-black: #000000;
   opacity: 0;
 }
 
-:host .token-white-preview {
-  fill: $color-white;
-  opacity: $preview;
-}
-
 :host .token-black-preview {
   fill: $color-black;
   opacity: $preview;
 }
 
-:host .token-white {
+:host .token-white-preview {
   fill: $color-white;
-  opacity: 1;
+  opacity: $preview;
 }
 
 :host .token-black {
   fill: $color-black;
+  opacity: 1;
+}
+
+:host .token-white {
+  fill: $color-white;
   opacity: 1;
 }
 
