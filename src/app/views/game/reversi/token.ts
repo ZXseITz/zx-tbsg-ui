@@ -7,10 +7,10 @@ export interface Line {
 
 export enum TokenState {
   EMPTY = 'token',
-  BLACK = 'token-black',
-  WHITE = 'token-white',
-  BLACK_PREVIEW = 'token-black-preview',
-  WHITE_PREVIEW = 'token-white-preview',
+  BLACK = 'token--black',
+  WHITE = 'token--white',
+  PREVIEW_BLACK = 'token--preview--black',
+  PREVIEW_WHITE = 'token--preview--white',
 }
 
 export class Token {
@@ -38,7 +38,7 @@ export class Token {
   }
 
   public onClick(): void {
-    if (this.mState === TokenState.BLACK_PREVIEW || this.mState === TokenState.WHITE_PREVIEW) {
+    if (this.mState === TokenState.PREVIEW_BLACK || this.mState === TokenState.PREVIEW_WHITE) {
       this.mOnClick();
     }
   }

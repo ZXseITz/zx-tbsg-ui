@@ -122,7 +122,7 @@ export class ReversiComponent implements OnInit, OnDestroy {
   }
 
   showPreview(preview: Array<number>): void {
-    const state = this.color === 1 ? TokenState.BLACK_PREVIEW : TokenState.WHITE_PREVIEW;
+    const state = this.color === 1 ? TokenState.PREVIEW_BLACK : TokenState.PREVIEW_WHITE;
     preview.forEach(p => {
       this.tokens[p].color = state;
     });
