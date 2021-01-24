@@ -25,13 +25,29 @@ export class ReversiComponent implements OnInit, OnDestroy {
   hLines: Array<Line>;
   vLines: Array<Line>;
   color: number;
+  source: Token;
 
   constructor(private gameService: GameService) {
     this.name = 'reversi';
+    this.hLines = new Array<Line>(9);
+    this.vLines = new Array<Line>(9);
+    this.tokens = new Array<Token>(64);
     this.client = new Client(`${gameService.wsUrl}/reversi`);
   }
 
   ngOnInit(): void {
+    for (let i = 0; i < 9; i++) {
+      const delta = i * 12.5;
+      this.hLines[i] = {x1: 0, y1: delta, x2: 100, y2: delta};
+      this.vLines[i] = {x1: delta, y1: 0, x2: delta, y2: 100};
+    }
+    for (let i = 0; i < 64; i++) {
+      this.tokens[i] = new Token(i, () => {
+        this.client.send(ReversiComponent.CLIENT_PLACE, {
+          index: i
+        });
+      });
+    }
     this.client.registerOnEvent(ReversiComponent.SERVER_INIT_PLAYER_NEXT, args => {
       if (args.has('color') && args.has('board') && args.has('preview')) {
         this.initGame(args.get('color'));  // fixme
@@ -83,21 +99,6 @@ export class ReversiComponent implements OnInit, OnDestroy {
       }
     });
     this.client.connect();
-    this.hLines = new Array<Line>(9);
-    this.vLines = new Array<Line>(9);
-    for (let i = 0; i < 9; i++) {
-      const delta = i * 12.5;
-      this.hLines[i] = {x1: 0, y1: delta, x2: 100, y2: delta};
-      this.vLines[i] = {x1: delta, y1: 0, x2: delta, y2: 100};
-    }
-    this.tokens = new Array<Token>(64);
-    for (let i = 0; i < 64; i++) {
-      this.tokens[i] = new Token(i, () => {
-        this.client.send(ReversiComponent.CLIENT_PLACE, {
-          index: i
-        });
-      });
-    }
   }
 
   printColor(color: number): string {
@@ -129,7 +130,11 @@ export class ReversiComponent implements OnInit, OnDestroy {
   }
 
   updateSource(source: number): void {
-    // todo highlight source index
+    if (this.source) {
+      this.source.highlight = false;
+    }
+    this.source = this.tokens[source];
+    this.source.highlight = true;
   }
 
   ngOnDestroy(): void {

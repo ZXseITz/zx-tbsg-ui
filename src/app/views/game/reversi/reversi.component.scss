@@ -15,6 +15,16 @@ $color-black: #000000;
   fill: $color-bg;
   opacity: 0;
 
+  &--black {
+    fill: $color-black;
+    opacity: 1;
+  }
+
+  &--white {
+    fill: $color-white;
+    opacity: 1;
+  }
+
   &--preview--black {
     @extend .token;
     &:hover {
@@ -32,14 +42,9 @@ $color-black: #000000;
   }
 }
 
-:host .token--black {
-  fill: $color-black;
-  opacity: 1;
-}
-
-:host .token--white {
-  fill: $color-white;
-  opacity: 1;
+:host .highlight {
+  stroke: #fcb603;
+  stroke-width: 0.5;
 }
 
 :host .bline {
