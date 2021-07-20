@@ -13,10 +13,11 @@
 </div>
 <div class="row">
   <div class="col-sm-8">
-    <ng-content></ng-content>
+    <ng-content select="#board"></ng-content>
   </div>
-  <div class="col-sm-4">
-    <div>Moves</div>
+  <div class="col-sm-4" style="height: 100%">
+    <h6>Moves</h6>
+    <ng-content select="#moves"></ng-content>
   </div>
 </div>
 <div class="row mt-sm-2">

@@ -4,5 +4,17 @@
     <line *ngFor="let line of vLines" class="bline" [attr.x1]="line.x1" [attr.y1]="line.y1" [attr.x2]="line.x2" [attr.y2]="line.y2"></line>
     <circle *ngFor="let token of tokens" [ngClass]="token.classList" [attr.r]="token.radius" [attr.cx]="token.x" [attr.cy]="token.y" (click)="token.onClick()"></circle>
   </svg>
+  <div id="moves">
+    <ul class="list-group">
+      <li *ngFor="let audit of audits" class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="flex-grow-1">
+          {{audit.color === 1 ? 'black' : audit.color === 2 ? 'white' : 'none'}}
+        </div>
+        <div>
+          {{audit.field}}
+        </div>
+      </li>
+    </ul>
+  </div>
 </app-game>
 

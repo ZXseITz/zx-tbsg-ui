@@ -6,9 +6,14 @@ $color-black: #000000;
 :host #board {
   background-color: $color-bg;
   width: 100%;
-  height: 100%;
+  height: auto;
   max-width: 20cm;
   max-height: 20cm;
+}
+
+:host #moves {
+  height: 100%;
+  overflow: auto;
 }
 
 :host .token {

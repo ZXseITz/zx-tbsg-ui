@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Line, Token, TokenState} from './token.js';
+import {Audit, Line, Token, TokenState} from './token.js';
 import {Client} from '../../../models/client';
 import {GameService} from '../../../services/game.service';
 
@@ -24,6 +24,7 @@ export class ReversiComponent implements OnInit, OnDestroy {
   tokens: Array<Token>;
   hLines: Array<Line>;
   vLines: Array<Line>;
+  audits: Audit[];
   color: number;
   source: Token;
 
@@ -32,6 +33,7 @@ export class ReversiComponent implements OnInit, OnDestroy {
     this.hLines = new Array<Line>(9);
     this.vLines = new Array<Line>(9);
     this.tokens = new Array<Token>(64);
+    this.audits = [];
     this.client = new Client(`${gameService.wsUrl}/reversi`);
   }
 
@@ -122,18 +124,18 @@ export class ReversiComponent implements OnInit, OnDestroy {
     }
   }
 
-  showPreview(preview: Array<number>): void {
+  showPreview(preview: Array<{index: number}>): void {
     const state = this.color === 1 ? TokenState.PREVIEW_BLACK : TokenState.PREVIEW_WHITE;
     preview.forEach(p => {
-      this.tokens[p].color = state;
+      this.tokens[p.index].color = state;
     });
   }
 
-  updateSource(source: number): void {
+  updateSource(source: {index: number}): void {
     if (this.source) {
       this.source.highlight = false;
     }
-    this.source = this.tokens[source];
+    this.source = this.tokens[source.index];
     this.source.highlight = true;
   }
 

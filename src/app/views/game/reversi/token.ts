@@ -5,6 +5,11 @@ export interface Line {
   y2: number;
 }
 
+export interface Audit {
+  color: number;
+  field: number;
+}
+
 export enum TokenState {
   EMPTY = 'token',
   BLACK = 'token--black',
